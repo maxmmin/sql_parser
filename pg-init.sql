@@ -1,0 +1,1 @@
+ALTER USER current_setting('PG_USER') CREATEDB;

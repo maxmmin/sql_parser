@@ -1,0 +1,2 @@
+POSTGRES_HOST=sql-parser_postgres
+POSTGRES_PORT=5432

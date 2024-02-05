@@ -1,26 +1,26 @@
-from docker.models.containers import ExecResult
+from subprocess import CompletedProcess
 
-from sql_parser.api.apps import Configuration
-from sql_parser.api.models import SqlProcessingMetadata
-from sql_parser.api.services.shell.docker_shell_executor import DockerShellExecutor
-from sql_parser.api.services.sql.accessor.sql_script_accessor import SqlScriptAccessor
-from sql_parser.api.services.sql.processor.sql_script_processor import SqlScriptProcessor
+from api.sql_parser.app.apps import Configuration
+from api.sql_parser.app.models import SqlProcessingMetadata
+from api.sql_parser.app.services.shell.shell_executor import ShellExecutor
+from api.sql_parser.app.services.sql.accessor.sql_script_accessor import SqlScriptAccessor
+from api.sql_parser.app.services.sql.processor.sql_script_processor import SqlScriptProcessor
 
 
 class PostgresScriptProcessor(SqlScriptProcessor):
-    docker_shell_executor: DockerShellExecutor
+    shell_executor: ShellExecutor
     sql_script_accessor: SqlScriptAccessor
 
     pg_port = 5432
 
     pg_matchers = ["pg", "postgres", "pg_dump"]
 
-    db_uname = Configuration.emulated_db_user
-    db_pwd = Configuration.emulated_db_password
+    db_uname = Configuration.db_user
+    db_pwd = Configuration.db_password
 
-    def __init__(self, docker_shell_executor: DockerShellExecutor):
+    def __init__(self, shell_executor: ShellExecutor):
         super().__init__()
-        self.docker_shell_executor = docker_shell_executor
+        self.shell_executor = shell_executor
 
     def supports_restore(self, script_name: str) -> bool:
         script_heading: str = self.sql_script_accessor.get(script_name=script_name, lines_amount=100).casefold()
@@ -40,8 +40,8 @@ class PostgresScriptProcessor(SqlScriptProcessor):
         command = (f'PGPASSWORD={self.db_pwd} psql -U postgres -c "CREATE DATABASE {db_name} '
                    f'WITH OWNER = {self.db_uname} ENCODING = \'UTF8\';"')
 
-        exec_res: ExecResult = (self.docker_shell_executor
-                                .exec(command=command))
+        exec_res: CompletedProcess = (self.shell_executor
+                                      .exec(command=command))
 
         return SqlProcessingMetadata(executor=self, command=command, exec_result=exec_res, db_name=db_name)
 
@@ -49,9 +49,9 @@ class PostgresScriptProcessor(SqlScriptProcessor):
         db_name = self.form_db_name(script_name)
 
         command = (f'PGPASSWORD={self.db_pwd} pg_restore -U {self.db_uname} -d {db_name}'
-                   f' -v {Configuration.emulated_scripts_path.join(script_name)}')
+                   f' -v {Configuration.scripts_path.join(script_name)}')
 
-        exec_res: ExecResult = self.docker_shell_executor.exec(command=command)
+        exec_res: CompletedProcess = self.shell_executor.exec(command=command)
 
         return SqlProcessingMetadata(executor=self, command=command, exec_result=exec_res, db_name=db_name)
 
@@ -59,8 +59,8 @@ class PostgresScriptProcessor(SqlScriptProcessor):
         db_name = self.form_db_name(script_name)
 
         command = (f'PGPASSWORD={self.db_pwd} psql -U {self.db_uname} -d {db_name} -f'
-                   f' {Configuration.emulated_scripts_path.join(script_name)}')
+                   f' {Configuration.scripts_path.join(script_name)}')
 
-        exec_res: ExecResult = self.docker_shell_executor.exec(command=command)
+        exec_res: CompletedProcess = self.shell_executor.exec(command=command)
 
         return SqlProcessingMetadata(executor=self, command=command, exec_result=exec_res, db_name=db_name)

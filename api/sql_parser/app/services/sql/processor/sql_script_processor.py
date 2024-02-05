@@ -1,6 +1,6 @@
 from abc import abstractmethod
 
-from sql_parser.api.models import SqlProcessingMetadata
+from api.sql_parser.app.models import SqlProcessingMetadata
 
 
 class SqlScriptProcessor:

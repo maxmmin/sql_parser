@@ -1,7 +1,7 @@
 import os
 from typing import Optional
 
-from sql_parser.api.services.sql.accessor.sql_script_accessor import SqlScriptAccessor
+from api.sql_parser.app.services.sql.accessor.sql_script_accessor import SqlScriptAccessor
 
 
 class FileSystemSqlScriptAccessor(SqlScriptAccessor):

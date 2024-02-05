@@ -1,0 +1,29 @@
+version: '3.5'
+services:
+  sql-parser_postgres:
+    image: postgres:latest
+    restart: unless-stopped
+    volumes:
+      - ./scripts:/${SQL_SCRIPTS_PATH}
+    env_file:
+      - .env
+    networks:
+      - parser_net
+
+  sql-parser_app:
+    restart: unless-stopped
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    env_file:
+      - .api-env
+      - .env
+    networks:
+      - parser_net
+
+networks:
+  parser_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.16.11.0/24
