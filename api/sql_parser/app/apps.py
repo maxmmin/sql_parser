@@ -10,4 +10,3 @@ class Configuration(AppConfig):
     pg_host = os.getenv("PG_HOST"),
     db_user = "sql_parser_app",
     db_password = "238sdaj21"
-    scripts_path = "/sql/scripts"

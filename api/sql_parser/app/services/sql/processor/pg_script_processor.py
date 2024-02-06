@@ -4,7 +4,6 @@ from subprocess import CompletedProcess
 from api.sql_parser.app.apps import Configuration
 from api.sql_parser.app.models import SqlProcessingMetadata
 from api.sql_parser.app.services.shell.shell_executor import ShellExecutor
-from api.sql_parser.app.services.sql.accessor.sql_script_accessor import SqlScriptAccessor
 from api.sql_parser.app.services.sql.processor.sql_script_processor import SqlScriptProcessor
 
 

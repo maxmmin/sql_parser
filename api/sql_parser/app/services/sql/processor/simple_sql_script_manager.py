@@ -2,7 +2,9 @@ from typing import List, Optional
 
 from api.sql_parser.app.apps import Configuration
 from api.sql_parser.app.models import SqlProcessingMetadata
+from api.sql_parser.app.services.sql.accessor.fs_sql_script_accessor import FileSystemSqlScriptAccessor
 from api.sql_parser.app.services.sql.accessor.sql_script_accessor import SqlScriptAccessor
+from api.sql_parser.app.services.sql.processor.pg_script_processor import PostgresScriptProcessor
 from api.sql_parser.app.services.sql.processor.sql_script_manager import SqlScriptManager
 from api.sql_parser.app.services.sql.processor.sql_script_processor import SqlScriptProcessor
 
@@ -20,7 +22,7 @@ class SimpleSqlScriptManager(SqlScriptManager):
         print(f"Running {script_name} recovery")
 
         script_heading = self.get_script_heading(script_name)
-        script_path = Configuration.scripts_path.join(script_name)
+        script_path = self.sql_script_accessor.build_script_path(script_name)
 
         metadata: Optional[SqlProcessingMetadata] = None
 
@@ -63,3 +65,6 @@ class SimpleSqlScriptManager(SqlScriptManager):
 
     def get_script_heading(self, script_name: str):
         return self.sql_script_accessor.get(script_name=script_name, lines_amount=100)
+
+
+test_manager = SimpleSqlScriptManager(sql_script_accessor=FileSystemSqlScriptAccessor(Configuration.sql_root_path), sql_processors=[PostgresScriptProcessor()])
