@@ -11,6 +11,11 @@ class SimpleSqlScriptManager(SqlScriptManager):
     sql_script_accessor: SqlScriptAccessor
     sql_processors: List[SqlScriptProcessor]
 
+    def __init__(self, sql_script_accessor: SqlScriptAccessor, sql_processors: List[SqlScriptProcessor]):
+        super().__init__()
+        self.sql_script_accessor = sql_script_accessor
+        self.sql_processors = sql_processors
+
     def process(self, script_name: str) -> Optional[SqlProcessingMetadata]:
         print(f"Running {script_name} recovery")
 
@@ -55,11 +60,6 @@ class SimpleSqlScriptManager(SqlScriptManager):
             print(f"Script {script_name} wasn't recovered.")
 
         return metadata
-
-    def __init__(self, sql_script_accessor: SqlScriptAccessor, sql_processors: List[SqlScriptProcessor]):
-        super().__init__()
-        self.sql_script_accessor = sql_script_accessor
-        self.sql_processors = sql_processors
 
     def get_script_heading(self, script_name: str):
         return self.sql_script_accessor.get(script_name=script_name, lines_amount=100)
