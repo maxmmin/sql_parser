@@ -1,28 +1,35 @@
 version: '3.5'
 services:
   sql-parser_postgres:
+    container_name: ${POSTGRES_HOST}
     image: postgres:latest
-    restart: unless-stopped
-    volumes:
-      - ./scripts:/${SQL_SCRIPTS_PATH}
+#    restart: unless-stopped
+    ports:
+      - '6543:5432'
     env_file:
       - .env
     networks:
-      - parser_net
+      - sql-parser_net
 
   sql-parser_app:
-    restart: unless-stopped
+    container_name: sql-parser_app
+    depends_on:
+      [sql-parser_postgres]
+#    restart: unless-stopped
     build:
-      context: ./api
+      context: app
       dockerfile: Dockerfile
     env_file:
       - .app-env
       - .env
+    volumes:
+            - ./scripts:/${SQL_SCRIPTS_PATH}
     networks:
-      - parser_net
+      - sql-parser_net
 
 networks:
-  parser_net:
+  sql-parser_net:
+    name: sql-parser_net
     driver: bridge
     ipam:
       config:
