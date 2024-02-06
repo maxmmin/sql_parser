@@ -1,0 +1,4 @@
+PGHOST=sql-parser_postgres
+PGPORT=5432
+PGUSER=${SQL_USER}
+PGPASSWORD=${SQL_PWD}

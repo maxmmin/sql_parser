@@ -16,7 +16,7 @@ services:
       context: ./api
       dockerfile: Dockerfile
     env_file:
-      - .api-env
+      - .app-env
       - .env
     networks:
       - parser_net
