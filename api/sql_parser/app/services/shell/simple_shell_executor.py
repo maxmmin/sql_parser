@@ -7,9 +7,8 @@ from api.sql_parser.app.util.check_out_exec_err import check_out_exec_err
 
 
 class SimpleShellExecutor(ShellExecutor):
-    def __init__(self, sql_engine_container_id: str):
+    def __init__(self):
         super().__init__()
-        self.sql_engine_container_id = sql_engine_container_id
 
     def exec(self, command: str) -> CompletedProcess:
         exec_result: CompletedProcess = subprocess.run(command, shell=True,
