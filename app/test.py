@@ -8,10 +8,10 @@ from service.sql.simple_sql_script_manager import SimpleSqlScriptManager
 
 processors = [PostgresScriptProcessor(SimpleShellExecutor())]
 
-time.sleep(5)
-
 sql_script_manager = SimpleSqlScriptManager(sql_processors=processors,
                                             sql_script_accessor=FileSystemSqlScriptAccessor(AppConfig.sql_scripts_path))
+
+time.sleep(5)
 
 data = sql_script_manager.process("backup_file.sql")
 
