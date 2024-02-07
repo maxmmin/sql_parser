@@ -3,7 +3,7 @@ from subprocess import CompletedProcess
 from typing import Optional
 
 from app_config import AppConfig
-from service.model.sql_processing_metadata import SqlProcessingMetadata
+from model.sql_processing_metadata import SqlProcessingMetadata
 from service.shell.shell_executor import ShellExecutor
 from service.sql.processor.sql_script_processor import SqlScriptProcessor
 

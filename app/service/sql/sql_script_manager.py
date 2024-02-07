@@ -1,6 +1,6 @@
 from abc import abstractmethod
 
-from service.model.sql_processing_metadata import SqlProcessingMetadata
+from model.sql_processing_metadata import SqlProcessingMetadata
 
 
 class SqlScriptManager:

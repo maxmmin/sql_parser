@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-from service.model.sql_processing_metadata import SqlProcessingMetadata
+from model.sql_processing_metadata import SqlProcessingMetadata
 from service.sql.accessor.sql_script_accessor import SqlScriptAccessor
 from service.sql.processor.sql_script_processor import SqlScriptProcessor
 from service.sql.sql_script_manager import SqlScriptManager

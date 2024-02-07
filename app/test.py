@@ -17,7 +17,9 @@ data = sql_script_manager.process("backup_file.sql")
 
 if data:
     print(f"Recovery finished: {data.db_name}"
-          f"Output: {data.exec_result.stdout}")
+          f"\nShell exit code: {data.exec_result.returncode}"
+          f"\nOutput: {data.exec_result.stdout}"
+          f"\nError output: {data.exec_result.stderr}")
 else:
     print("Err. Exiting...")
 
